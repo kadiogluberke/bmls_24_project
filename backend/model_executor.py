@@ -8,6 +8,6 @@ class ModelExecutor:
         self.model.load_model(model_path)
 
     def predict(self, data: List[List[float]]) -> List[float]:
-        dmatrix = xgb.DMatrix(data)
-        predictions = self.model.predict(dmatrix)
+        dmatrix = xgb.DMatrix(data, feature_names=None)
+        predictions = self.model.predict(dmatrix, validate_features=False)
         return predictions.tolist()
