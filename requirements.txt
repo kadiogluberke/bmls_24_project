@@ -1,0 +1,6 @@
+fastapi
+pydantic
+uvicorn
+xgboost
+scikit-learn
+requests
