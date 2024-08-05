@@ -4,3 +4,8 @@ uvicorn
 xgboost
 scikit-learn
 requests
+sqlalchemy 
+pandas 
+psycopg2-binary 
+python-dotenv
+jupyter
