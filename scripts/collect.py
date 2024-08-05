@@ -1,8 +1,10 @@
 from model_pipeline.data_collector import DataCollector
+import logging
 
-# Example usage:
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
     collector = DataCollector()
-    data = collector.get_data(days=10)
-    print(data.shape)
-    print(data.head())
+    collector.run()

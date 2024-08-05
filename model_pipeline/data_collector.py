@@ -5,11 +5,13 @@ from sqlalchemy.sql import text
 from dotenv import load_dotenv
 import pandas as pd
 from datetime import datetime, timedelta
+import logging
 
 
 class DataCollector:
     def __init__(self):
         load_dotenv()
+        self.logger = logging.getLogger(__name__)
 
         self.db_username = os.getenv("DB_USERNAME")
         self.db_password = os.getenv("DB_PASSWORD")
@@ -21,7 +23,7 @@ class DataCollector:
 
         self.engine = create_engine(self.connection_string)
 
-    def get_data(self, days: int = 30) -> pd.DataFrame:
+    def get_data(self, days: int = 10) -> pd.DataFrame:
         try:
             end_date = datetime.now()
             start_date = end_date - timedelta(days=days)
@@ -42,14 +44,60 @@ class DataCollector:
                         df = pd.DataFrame(result.fetchall(), columns=result.keys())
                         all_data.append(df)
 
-                # Concatenate all data into a single DataFrame
                 if all_data:
                     combined_df = pd.concat(all_data, ignore_index=True)
                     return combined_df
                 else:
                     return pd.DataFrame()
         except SQLAlchemyError as e:
-            print(f"Error occurred: {e}")
+            self.logger.error(f"Failed to get data: {e}")
             return pd.DataFrame()
-        
-    def store_data()
+
+    def store_data_to_csv(
+        self, data: pd.DataFrame, file_name: str = "data.csv", folder: str = "data"
+    ) -> None:
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        file_path = os.path.join(folder, file_name)
+        data.to_csv(file_path, index=False)
+        self.logger.info(f"Data stored to {file_path}, {len(data)} rows")
+
+    def collect_zones_data(self) -> pd.DataFrame:
+        try:
+            with self.engine.connect() as connection:
+                query = text("SELECT * FROM taxi_zone_lookup")
+                result = connection.execute(query)
+                df = pd.DataFrame(result.fetchall(), columns=result.keys())
+                self.logger.info(f"Zones data collected, {len(df)} rows")
+                return df
+        except SQLAlchemyError as e:
+            self.logger.error(f"Failed to get zones data: {e}")
+            return pd.DataFrame()
+
+    def store_zones_data_to_csv(
+        self, data: pd.DataFrame, file_name: str = "zones.csv", folder: str = "data"
+    ) -> None:
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        file_path = os.path.join(folder, file_name)
+        data.to_csv(file_path, index=False)
+        self.logger.info(f"Zones data stored to {file_path}, {len(data)} rows")
+
+    def run(
+        self,
+        days: int = 10,
+        file_name: str = "data.csv",
+        folder: str = "data",
+        zones_file_name: str = "zones.csv",
+    ) -> None:
+        data = self.get_data(days=days)
+        if not data.empty:
+            self.store_data_to_csv(data, file_name, folder)
+        else:
+            self.logger.warning("No data to store")
+
+        zones_data = self.collect_zones_data()
+        if not zones_data.empty:
+            self.store_zones_data_to_csv(zones_data, zones_file_name, folder)
+        else:
+            self.logger.warning("No zones data to store")
