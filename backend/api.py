@@ -1,34 +1,44 @@
 from fastapi import APIRouter, Depends
-from pydantic import BaseModel
 from typing import List
 from backend.model_executor import ModelExecutor
+from backend.feature_extractor import FeatureExtractor
+from model_pipeline.data_collector import DataCollector
+from backend.api_models import PredictionRequest, PredictionResponse
 
 router = APIRouter()
 
 _model_executor = None
+_feature_extractor = None
 
 
 def get_model_executor() -> ModelExecutor:
     global _model_executor
 
     if _model_executor is None:
-        _model_executor = ModelExecutor(model_path="models/model.json")
+        _model_executor = ModelExecutor(model_path="models/xgb.json")
 
     return _model_executor
 
 
-class PredictionRequest(BaseModel):
-    data: List[List[float]]
+def get_feature_extractor() -> FeatureExtractor:
+    global _feature_extractor
 
+    if _feature_extractor is None:
+        _feature_extractor = FeatureExtractor(
+            zones_filename="zones.csv",
+            folder="data",
+            data_collector=DataCollector(),
+        )
 
-class PredictionResponse(BaseModel):
-    predictions: List[float]
+    return _feature_extractor
 
 
 @router.post("/predict", response_model=PredictionResponse)
 async def predict(
     request: PredictionRequest,
     model_executor: ModelExecutor = Depends(get_model_executor),
+    feature_extractor: FeatureExtractor = Depends(get_feature_extractor),
 ):
-    predictions = model_executor.predict(request.data)
-    return PredictionResponse(predictions=predictions)
+    extracted_features = feature_extractor.extract_features(request)
+    prediction = model_executor.predict(extracted_features)
+    return PredictionResponse(prediction=prediction)

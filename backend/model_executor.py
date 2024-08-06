@@ -1,5 +1,6 @@
 import xgboost as xgb
 from typing import List
+import pandas as pd
 
 
 class ModelExecutor:
@@ -7,7 +8,7 @@ class ModelExecutor:
         self.model = xgb.Booster()
         self.model.load_model(model_path)
 
-    def predict(self, data: List[List[float]]) -> List[float]:
-        dmatrix = xgb.DMatrix(data, feature_names=None)
-        predictions = self.model.predict(dmatrix, validate_features=False)
-        return predictions.tolist()
+    def predict(self, df: pd.DataFrame) -> float:
+        dmatrix = xgb.DMatrix(df)
+        predictions = self.model.predict(dmatrix)
+        return predictions[0]
