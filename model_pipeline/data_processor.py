@@ -19,6 +19,7 @@ class DataProcessor:
 
     def extract_features(self, df: pd.DataFrame) -> pd.DataFrame:
         logging.info("Start extracting features")
+
         df["tpep_pickup_datetime"] = pd.to_datetime(df["tpep_pickup_datetime"])
         df["tpep_dropoff_datetime"] = pd.to_datetime(df["tpep_dropoff_datetime"])
 
@@ -32,6 +33,15 @@ class DataProcessor:
         df["trip_time"] = (
             df["tpep_dropoff_datetime"] - df["tpep_pickup_datetime"]
         ).apply(lambda x: x.total_seconds() / 60)
+
+        # Remove rows with invalid values
+        df = df[
+            (df["trip_distance"] > 0)
+            & (df["passenger_count"] > 0)
+            & (df["fare_amount"] > 0)
+            & (df["total_amount"] > 0)
+            & (df["trip_time"] > 0)
+        ]
 
         df["is_from_airport"] = df["Airport_fee"].apply(lambda x: 1 if x > 0 else 0)
 
