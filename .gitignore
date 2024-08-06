@@ -124,9 +124,9 @@ celerybeat.pid
 # Environments
 .env
 .venv
-env/
+.env/
 venv/
-ENV/
+.env/
 env.bak/
 venv.bak/
 
@@ -165,4 +165,5 @@ cython_debug/
 /data/
 /models/
 **/.DS_Store
-**/model.json
+models/model.json
+.dockerignore
