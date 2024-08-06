@@ -12,7 +12,7 @@ def get_model_executor() -> ModelExecutor:
     global _model_executor
 
     if _model_executor is None:
-        _model_executor = ModelExecutor(model_path="model.json")
+        _model_executor = ModelExecutor(model_path="models/model.json")
 
     return _model_executor
 
