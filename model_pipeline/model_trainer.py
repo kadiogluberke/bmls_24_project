@@ -93,8 +93,3 @@ class ModelTrainer:
         self.tune_hyperparameters(n_trials)
         self.train_best_model()
         self.save_model()
-
-
-if __name__ == "__main__":
-    trainer = ModelTrainer("train_data.csv", "val_data.csv", "test_data.csv")
-    trainer.run()
