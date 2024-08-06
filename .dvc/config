@@ -1,4 +1,6 @@
 [core]
-    remote = local
-['remote "local"']
-    url = /tmp/dvcstore
+    remote = storage
+    autostage = true
+['remote "storage"']
+    url = s3://taxi/
+    endpointUrl = https://fly.storage.tigris.dev
