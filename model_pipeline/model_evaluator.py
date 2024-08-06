@@ -6,14 +6,23 @@ from sklearn.metrics import (
     mean_absolute_percentage_error,
 )
 import logging
+import json
 import os
 
 
 class ModelEvaluator:
-    def __init__(self, model_path: str, test_file: str):
+    def __init__(
+        self,
+        model_path: str,
+        test_file: str,
+        report_file: str = "evaluation.json",
+        report_folder: str = "reports",
+    ):
         self.logger = logging.getLogger(__name__)
         self.model_path = model_path
         self.test_file = test_file
+        self.report_file = report_file
+        self.report_folder = report_folder
         self.model = None
         self.X_test = None
         self.y_test = None
@@ -49,7 +58,28 @@ class ModelEvaluator:
         self.logger.info(f"MAE: {mae}")
         self.logger.info(f"MAPE: {mape}")
 
+        evaluation_report = {
+            "Test RMSE": rmse,
+            "Test MAE": mae,
+            "Test MAPE": mape,
+        }
+
+        return evaluation_report
+
+    def save_evaluation_report(self, evaluation_report: dict):
+
+        if not os.path.exists(self.report_folder):
+            os.makedirs(self.report_folder)
+
+        report_path = os.path.join(self.report_folder, self.report_file)
+
+        with open(report_path, "w") as f:
+            json.dump(evaluation_report, f)
+
+        self.logger.info(f"Evaluation report saved to {report_path}")
+
     def run(self):
         self.load_model()
         self.load_test_data()
-        self.evaluate()
+        evaluation_report = self.evaluate()
+        self.save_evaluation_report(evaluation_report)
