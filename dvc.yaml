@@ -1,0 +1,46 @@
+stages:
+
+  collect_data:
+    cmd: python -m scripts.collect
+    deps:
+      - scripts/collect.py
+      - model_pipeline/data_collector.py
+      - requirements.txt
+    outs:
+      - data/data.csv
+      - data/zones.csv
+
+  process_data:
+    cmd: python -m scripts.process
+    deps:
+      - scripts/process.py
+      - model_pipeline/data_processor.py
+      - data/data.csv
+      - data/zones.csv
+      - requirements.txt
+    outs:
+      - data/train.csv
+      - data/val.csv
+      - data/test.csv
+
+  train_model:
+    cmd: python -m scripts.train
+    deps:
+      - scripts/train.py
+      - model_pipeline/model_trainer.py
+      - data/train.csv
+      - data/val.csv
+      - requirements.txt
+    outs:
+      - models/xgb.json
+
+  evaluate_model:
+    cmd: python -m scripts.evaluate
+    deps:
+      - scripts/evaluate.py
+      - model_pipeline/model_evaluator.py
+      - data/test.csv
+      - models/xgb.json
+      - requirements.txt
+    outs:
+      - reports/evaluation.json
