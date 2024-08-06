@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from typing import List
-from model_executor import ModelExecutor
+from backend.model_executor import ModelExecutor
 
 router = APIRouter()
 
