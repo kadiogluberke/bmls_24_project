@@ -25,7 +25,7 @@ def get_feature_extractor() -> FeatureExtractor:
     if _feature_extractor is None:
         _feature_extractor = FeatureExtractor(
             zones_filename="zones.csv",
-            folder="data",
+            data_folder="data",
             test_filename="test.csv",
         )
 
