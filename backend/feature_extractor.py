@@ -1,33 +1,22 @@
 import os
 import logging
 import pandas as pd
-from model_pipeline.data_collector import DataCollector
 from backend.api_models import PredictionRequest
 
 
 class FeatureExtractor:
-    def __init__(self, zones_filename: str, folder: str, data_collector: DataCollector):
+    def __init__(
+        self, zones_filename: str, data_folder: str, test_filename: str
+    ) -> None:
         self.logger = logging.getLogger(__name__)
         self.zones_filename = zones_filename
-        self.folder = folder
-        self.data_collector = data_collector
-        self.zones_filepath = os.path.join(folder, zones_filename)
-
-        self.df_zone = None
-        self._ensure_zones_data()
-
-    def _ensure_zones_data(self):
-        if not os.path.exists(self.zones_filepath):
-            self.logger.info(f"{self.zones_filename} not found. Downloading...")
-            self.df_zone = self.data_collector.collect_zones_data()
-            self.data_collector.store_zones_data_to_csv(
-                self.df_zone, self.zones_filename, self.folder
-            )
-        else:
-            self.df_zone = pd.read_csv(self.zones_filepath)
+        self.folder = data_folder
+        self.zones_filepath = os.path.join(data_folder, zones_filename)
+        self.df_zone = pd.read_csv(self.zones_filepath)
+        self.test_filepath = os.path.join(data_folder, test_filename)
 
     def _get_dummy_columns(self):
-        test_df_top = pd.read_csv("data/test.csv", nrows=0)
+        test_df_top = pd.read_csv(self.test_filepath, nrows=0)
         test_df_top.drop(columns=["trip_time"], inplace=True)
         return test_df_top.columns.tolist()
 

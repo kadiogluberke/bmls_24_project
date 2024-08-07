@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends
 from typing import List
 from backend.model_executor import ModelExecutor
 from backend.feature_extractor import FeatureExtractor
-from model_pipeline.data_collector import DataCollector
 from backend.api_models import PredictionRequest, PredictionResponse
 
 router = APIRouter()
@@ -27,7 +26,7 @@ def get_feature_extractor() -> FeatureExtractor:
         _feature_extractor = FeatureExtractor(
             zones_filename="zones.csv",
             folder="data",
-            data_collector=DataCollector(),
+            test_filename="test.csv",
         )
 
     return _feature_extractor
