@@ -17,7 +17,9 @@ class DataProcessor:
         df_zone = pd.read_csv(self.zones_filename)
         return df, df_zone
 
-    def extract_features(self, df: pd.DataFrame) -> pd.DataFrame:
+    def extract_features(
+        self, df: pd.DataFrame, remove_invalid: bool = True
+    ) -> pd.DataFrame:
         logging.info("Start extracting features")
 
         df["tpep_pickup_datetime"] = pd.to_datetime(df["tpep_pickup_datetime"])
@@ -35,13 +37,14 @@ class DataProcessor:
         ).apply(lambda x: x.total_seconds() / 60)
 
         # Remove rows with invalid values
-        df = df[
-            (df["trip_distance"] > 0)
-            & (df["passenger_count"] > 0)
-            & (df["fare_amount"] > 0)
-            & (df["total_amount"] > 0)
-            & (df["trip_time"] > 0)
-        ]
+        if remove_invalid:
+            df = df[
+                (df["trip_distance"] > 0)
+                & (df["passenger_count"] > 0)
+                & (df["fare_amount"] > 0)
+                & (df["total_amount"] > 0)
+                & (df["trip_time"] > 0)
+            ]
 
         df["is_from_airport"] = df["Airport_fee"].apply(lambda x: 1 if x > 0 else 0)
 
@@ -149,4 +152,5 @@ class DataProcessor:
         df = self.extract_features(df)
         df = self.merge_location_data(df, df_zone)
         df = self.encode_categorical(df)
+        df = df.astype(float)
         self.split_and_save_data(df, "train.csv", "val.csv", "test.csv")

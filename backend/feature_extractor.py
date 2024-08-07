@@ -103,5 +103,6 @@ class FeatureExtractor:
         df = self._merge_zones(df)
         df = self._one_hot_encode(df)
         df = self._reorder_columns(df)
+        df = df.astype(float)
         self.logger.info("Feature extraction for inference completed")
         return df
