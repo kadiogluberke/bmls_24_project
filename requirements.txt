@@ -11,3 +11,5 @@ python-dotenv
 jupyter
 optuna
 dvc_s3
+pytest
+prefect
