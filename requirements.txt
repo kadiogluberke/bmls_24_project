@@ -13,3 +13,4 @@ optuna
 dvc_s3
 pytest
 prefect
+dvclive
