@@ -8,6 +8,7 @@ from sklearn.metrics import (
 import logging
 import json
 import os
+from dvclive import Live
 
 
 class ModelEvaluator:
@@ -21,8 +22,8 @@ class ModelEvaluator:
         self.logger = logging.getLogger(__name__)
         self.model_path = model_path
         self.test_file = test_file
-        self.report_file = report_file
-        self.report_folder = report_folder
+        # self.report_file = report_file
+        # self.report_folder = report_folder
         self.model = None
         self.X_test = None
         self.y_test = None
@@ -58,28 +59,35 @@ class ModelEvaluator:
         self.logger.info(f"MAE: {mae}")
         self.logger.info(f"MAPE: {mape}")
 
-        evaluation_report = {
-            "Test RMSE": rmse,
-            "Test MAE": mae,
-            "Test MAPE": mape,
-        }
+        with Live(resume=True) as live:
+            live.log_metric("RMSE", rmse)
+            live.log_metric("MAE", mae)
+            live.log_metric("MAPE", mape)
 
-        return evaluation_report
+        self.logger.info(f"Evaluation metrics saved")
 
-    def save_evaluation_report(self, evaluation_report: dict):
+        # evaluation_report = {
+        #     "Test RMSE": rmse,
+        #     "Test MAE": mae,
+        #     "Test MAPE": mape,
+        # }
 
-        if not os.path.exists(self.report_folder):
-            os.makedirs(self.report_folder)
+        return
 
-        report_path = os.path.join(self.report_folder, self.report_file)
-
-        with open(report_path, "w") as f:
-            json.dump(evaluation_report, f)
-
-        self.logger.info(f"Evaluation report saved to {report_path}")
+    # def save_evaluation_report(self, evaluation_report: dict):
+    #
+    #     if not os.path.exists(self.report_folder):
+    #         os.makedirs(self.report_folder)
+    #
+    #     report_path = os.path.join(self.report_folder, self.report_file)
+    #
+    #     with open(report_path, "w") as f:
+    #         json.dump(evaluation_report, f)
+    #
+    #     self.logger.info(f"Evaluation report saved to {report_path}")
 
     def run(self):
         self.load_model()
         self.load_test_data()
-        evaluation_report = self.evaluate()
-        self.save_evaluation_report(evaluation_report)
+        self.evaluate()
+        # self.save_evaluation_report(evaluation_report)

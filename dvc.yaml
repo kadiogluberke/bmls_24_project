@@ -26,21 +26,22 @@ stages:
   train_model:
     cmd: python -m scripts.train
     deps:
-      - scripts/train.py
-      - model_pipeline/model_trainer.py
-      - data/train.csv
-      - data/val.csv
-      - requirements.txt
+    - scripts/train.py
+    - model_pipeline/model_trainer.py
+    - data/train.csv
+    - data/val.csv
+    - requirements.txt
     outs:
-      - models/xgb.json
+    - models/xgb.json
 
   evaluate_model:
     cmd: python -m scripts.evaluate
     deps:
-      - scripts/evaluate.py
-      - model_pipeline/model_evaluator.py
-      - data/test.csv
-      - models/xgb.json
-      - requirements.txt
-    outs:
-      - reports/evaluation.json
+    - scripts/evaluate.py
+    - model_pipeline/model_evaluator.py
+    - data/test.csv
+    - models/xgb.json
+    - requirements.txt
+#    outs:
+#    - reports/evaluation.json
+

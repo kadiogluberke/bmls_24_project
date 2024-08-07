@@ -73,11 +73,11 @@ stages:
       size: 17062107
     - path: model_pipeline/model_trainer.py
       hash: md5
-      md5: 0c17be7a6507598d96a8cefba69255f2
-      size: 3552
+      md5: 3729f657e4848626612a46d0d8f6569d
+      size: 3910
     - path: requirements.txt
       hash: md5
-      md5: 3c15fa67fdcd4848e9c83dfdf7b0d0d4
+      md5: 5ad66602e9c1757ad31695838dbabb82
       size: 127
     - path: scripts/train.py
       hash: md5
@@ -97,22 +97,17 @@ stages:
       size: 17033973
     - path: model_pipeline/model_evaluator.py
       hash: md5
-      md5: 0aa866acf06590564d03acc7de4ba970
-      size: 2589
+      md5: fd5b0f8d26707b90a29ec09350230ca3
+      size: 2846
     - path: models/xgb.json
       hash: md5
       md5: 6c5e009d439976fd50d31fa29dc1f286
       size: 12677
     - path: requirements.txt
       hash: md5
-      md5: 3c15fa67fdcd4848e9c83dfdf7b0d0d4
+      md5: 5ad66602e9c1757ad31695838dbabb82
       size: 127
     - path: scripts/evaluate.py
       hash: md5
       md5: ecfa7f8d549adce9eaf7a33fda945f87
       size: 254
-    outs:
-    - path: reports/evaluation.json
-      hash: md5
-      md5: 421102282ac38f8a7f19ff7de5aea1be
-      size: 94

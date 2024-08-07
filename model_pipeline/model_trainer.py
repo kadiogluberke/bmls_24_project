@@ -6,6 +6,7 @@ from optuna.samplers import TPESampler
 from sklearn.metrics import mean_absolute_error
 import logging
 import os
+from dvclive import Live
 
 
 class ModelTrainer:
@@ -86,6 +87,8 @@ class ModelTrainer:
         model_path = os.path.join(self.model_dir, model_filename)
         self.best_model.save_model(model_path)
         self.logger.info(f"Model saved to {model_path}")
+        with Live() as live:
+            live.log_artifact(model_filename, type="model", name="xgboost")
 
     def run(self, n_trials: int = 100):
         self.load_data()
@@ -93,3 +96,9 @@ class ModelTrainer:
         self.tune_hyperparameters(n_trials)
         self.train_best_model()
         self.save_model()
+        with Live(resume=True) as live:
+            live.log_param("best_params", self.best_params)
+            live.log_param("len_train_data", len(self.y_train))
+            live.log_param("len_test_data", len(self.y_test))
+
+
