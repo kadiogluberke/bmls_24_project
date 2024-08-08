@@ -18,9 +18,9 @@ jobs:
       with:
         python-version: '3.11.9'
 
-    - name: Install Requirements
+    - name: Install DVC
       run: |
-        pip install -r requirements.txt
+        pip install dvc
 
     - name: Configure AWS credentials
       env:
