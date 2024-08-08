@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   model-pipeline:
     runs-on: ubuntu-24.04
@@ -37,10 +41,10 @@ jobs:
       run: echo "${{ secrets.ENV_FILE }}" > .env
 
     - name: Run DVC experiments
-      run: dvc exp run
+      run: dvc exp run --force
 
     - name: DVC push
-      run: echo "dvc push"
+      run: dvc push
 
     - name: Configure Git
       run: |
@@ -50,22 +54,29 @@ jobs:
     - name: Push changes to new branch
       id: push-branch
       env:
-        GITHUB_TOKEN: ${{ secrets.CONFIGURED_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        echo {{ secrets.CONFIGURED_GITHUB_TOKEN }}
-        echo {{ secrets.CONFIGURED_GITHUB_TOKEN }} | gh auth login --with-token
         BRANCH_NAME=run-exp-$(date +'%Y%m%d-%H%M')
         git checkout -b $BRANCH_NAME
         git add dvc.lock dvclive
         git commit -m "Run DVC Experiments for model pipeline"
         git push origin $BRANCH_NAME
         echo "::set-output name=branch_name::$BRANCH_NAME"
-  
+
     - name: Create Pull Request
+      if: steps.push-branch.outputs.branch_name != ''
       env:
-        GITHUB_TOKEN: ${{ secrets.CONFIGURED_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        BRANCH_NAME=${{ needs.model-pipeline.outputs.branch_name }}
-        curl -u "github-actions[bot]:${{ secrets.CONFIGURED_GITHUB_TOKEN }}" \
-        -d '{"title":"Run DVC Experiments for model pipeline","head":"'"$BRANCH_NAME"'","base":"prod"}' \
-        https://api.github.com/repos/${{ github.repository }}/pulls
+        PR_TITLE="Update DVC lock file and dvclive metrics"
+        BRANCH_NAME=${{ steps.push-branch.outputs.branch_name }}
+        BASE_BRANCH=prod
+        METRICS=$(python3 -c "import json; data = json.load(open('dvclive/metrics.json')); print(json.dumps(data, indent=2))")
+        PR_BODY="This pull request updates the DVC lock file and dvclive metrics. Metrics: \`\`\`$METRICS\`\`\`"
+        PR_BODY_ESCAPED=$(echo "$PR_BODY" | jq -sRr @json)
+        API_URL="https://api.github.com/repos/${{ github.repository }}/pulls"
+        
+        curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          -d "{\"title\": \"$PR_TITLE\", \"head\": \"$BRANCH_NAME\", \"base\": \"$BASE_BRANCH\", \"body\": $PR_BODY_ESCAPED}" \
+          $API_URL
