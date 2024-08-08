@@ -1,0 +1,39 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+        aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+        aws configure set region auto
+
+    - name: Copy .env file
+      run: echo "${{ secrets.ENV_FILE }}" > .env
+
+    - name: DVC pull
+      run: dvc pull
+
+    - name: Fly.io deploy
+      env:
+        FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      run: |
+        curl -L https://fly.io/install.sh | sh
+        export FLYCTL_INSTALL="/home/runner/.fly"
+        export PATH="$FLYCTL_INSTALL/bin:$PATH"
+        flyctl auth token $FLY_API_TOKEN
+        flyctl deploy
