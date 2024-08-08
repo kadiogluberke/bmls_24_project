@@ -63,11 +63,11 @@ jobs:
         git push origin $BRANCH_NAME
         echo "::set-output name=branch_name::$BRANCH_NAME"
   
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v6
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ steps.push-branch.outputs.branch_name }}
-        title: Update DVC lock file and dvclive metrics
-        body: This pull request updates the DVC lock file and dvclive metrics.
-        base: main
+    # - name: Create Pull Request
+    #   uses: peter-evans/create-pull-request@v6
+    #   with:
+    #     token: ${{ secrets.GITHUB_TOKEN }}
+    #     branch: ${{ steps.push-branch.outputs.branch_name }}
+    #     title: Update DVC lock file and dvclive metrics
+    #     body: This pull request updates the DVC lock file and dvclive metrics.
+    #     base: main
