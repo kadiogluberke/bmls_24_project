@@ -90,7 +90,7 @@ class DataCollector:
         folder: str = "data",
         zones_file_name: str = "zones.csv",
     ) -> None:
-        data = self.get_data(days=days)
+        data = self.get_data(days=1)
         if not data.empty:
             self.store_data_to_csv(data, file_name, folder)
         else:

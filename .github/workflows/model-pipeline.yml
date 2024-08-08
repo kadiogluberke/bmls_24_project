@@ -74,6 +74,7 @@ jobs:
         BASE_BRANCH=main
         API_URL="https://api.github.com/repos/${{ github.repository }}/pulls"
         
-        curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
-          -d "{\"title\":\"$PR_TITLE\", \"head\":\"$BRANCH_NAME\", \"base\":\"$BASE_BRANCH\", \"body\":\"$PR_BODY\"}" \
-          $API_URL
+        curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
+        -H "Accept: application/vnd.github.v3+json" \
+        -d "{\"title\":\"$PR_TITLE\", \"head\":\"$BRANCH_NAME\", \"base\":\"$BASE_BRANCH\", \"body\":\"$PR_BODY\"}" \
+        $API_URL
