@@ -18,8 +18,8 @@ stages:
     outs:
     - path: data/data.csv
       hash: md5
-      md5: 2ce97a14537ead1b76f1fe2208b7bbe6
-      size: 124892450
+      md5: 5fe3e0320464d17594911daaaf4d28ee
+      size: 109399910
     - path: data/zones.csv
       hash: md5
       md5: 3b5ed059f4ff23f0927b3373d4a67d9f
@@ -29,8 +29,8 @@ stages:
     deps:
     - path: data/data.csv
       hash: md5
-      md5: 2ce97a14537ead1b76f1fe2208b7bbe6
-      size: 124892450
+      md5: 5fe3e0320464d17594911daaaf4d28ee
+      size: 109399910
     - path: data/zones.csv
       hash: md5
       md5: 3b5ed059f4ff23f0927b3373d4a67d9f
@@ -50,31 +50,31 @@ stages:
     outs:
     - path: data/test.csv
       hash: md5
-      md5: c09b8b577bfac1ffb01d471eac5628c5
-      size: 12695319
+      md5: 5175dbe3ac66b7ccbde6e084edd7ae59
+      size: 11117726
     - path: data/train.csv
       hash: md5
-      md5: f86c6b588214407b3ec1aed03563f4bc
-      size: 59545451
+      md5: 55d180f1f4b41d7004726df41286d55b
+      size: 52131340
     - path: data/val.csv
       hash: md5
-      md5: 6fd62a1e346596c099c30b2f8b8e9c47
-      size: 12697115
+      md5: 34062da39d719a68279f9dbe9141995f
+      size: 11128430
   train_model:
     cmd: python -m scripts.train
     deps:
     - path: data/train.csv
       hash: md5
-      md5: f86c6b588214407b3ec1aed03563f4bc
-      size: 59545451
+      md5: 55d180f1f4b41d7004726df41286d55b
+      size: 52131340
     - path: data/val.csv
       hash: md5
-      md5: 6fd62a1e346596c099c30b2f8b8e9c47
-      size: 12697115
+      md5: 34062da39d719a68279f9dbe9141995f
+      size: 11128430
     - path: model_pipeline/model_trainer.py
       hash: md5
-      md5: 3729f657e4848626612a46d0d8f6569d
-      size: 3910
+      md5: 15edb67f7de03c93e504687aae04f7db
+      size: 3904
     - path: requirements.txt
       hash: md5
       md5: 281c7b6808ca34421df966670efed4e5
@@ -86,23 +86,23 @@ stages:
     outs:
     - path: models/xgb.json
       hash: md5
-      md5: 0caa4b5ba8f7681cc4de38726c0d9348
-      size: 21178
+      md5: c1cef64d1186843dfa9ff20e910e682f
+      size: 21091
   evaluate_model:
     cmd: python -m scripts.evaluate
     deps:
     - path: data/test.csv
       hash: md5
-      md5: c09b8b577bfac1ffb01d471eac5628c5
-      size: 12695319
+      md5: 5175dbe3ac66b7ccbde6e084edd7ae59
+      size: 11117726
     - path: model_pipeline/model_evaluator.py
       hash: md5
       md5: fd5b0f8d26707b90a29ec09350230ca3
       size: 2846
     - path: models/xgb.json
       hash: md5
-      md5: 0caa4b5ba8f7681cc4de38726c0d9348
-      size: 21178
+      md5: c1cef64d1186843dfa9ff20e910e682f
+      size: 21091
     - path: requirements.txt
       hash: md5
       md5: 281c7b6808ca34421df966670efed4e5

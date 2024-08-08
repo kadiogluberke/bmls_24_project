@@ -47,7 +47,7 @@ stages:
 
 artifacts:
   xgboost:
-    path: xgb.json
+    path: models/xgb.json
     type: model
 params:
 - dvclive/params.yaml
