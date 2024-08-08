@@ -88,7 +88,7 @@ class ModelTrainer:
         self.best_model.save_model(model_path)
         self.logger.info(f"Model saved to {model_path}")
         with Live() as live:
-            live.log_artifact(model_filename, type="model", name="xgboost")
+            live.log_artifact(model_path, type="model", name="xgboost")
 
     def run(self, n_trials: int = 100):
         self.load_data()
@@ -100,5 +100,3 @@ class ModelTrainer:
             live.log_param("best_params", self.best_params)
             live.log_param("len_train_data", len(self.y_train))
             live.log_param("len_test_data", len(self.y_test))
-
-
