@@ -1,0 +1,52 @@
+name: Build and Deploy
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Requirements
+      run: |
+        pip install -r requirements.txt
+
+    - name: Configure AWS credentials
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+        aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+        aws configure set region auto
+
+    - name: Copy .env file
+      run: echo "${{ secrets.ENV_FILE }}" > .env
+
+    - name: DVC pull
+      run: dvc pull
+
+    - name: Run DVC experiments
+      run: dvc exp run
+
+    - name: DVC push
+      run: dvc push
+
+    - name: Fly.io deploy
+      env:
+        FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      run: |
+        curl -L https://fly.io/install.sh | sh
+        flyctl auth token $FLY_API_TOKEN
+        flyctl deploy
