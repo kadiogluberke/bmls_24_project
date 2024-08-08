@@ -20,7 +20,7 @@ jobs:
 
     - name: Install DVC
       run: |
-        pip install dvc
+        pip install dvc dvc_s3
 
     - name: Configure AWS credentials
       env:
