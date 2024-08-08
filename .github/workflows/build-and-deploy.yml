@@ -34,9 +34,6 @@ jobs:
     - name: Copy .env file
       run: echo "${{ secrets.ENV_FILE }}" > .env
 
-    - name: DVC pull
-      run: dvc pull
-
     - name: Run DVC experiments
       run: dvc exp run --force
 
