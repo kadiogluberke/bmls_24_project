@@ -1,9 +1,9 @@
-name: Build and Deploy
+name: Model pipeline
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - main
 
 jobs:
   build-and-deploy:
@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Setup Python
       uses: actions/setup-python@v5
@@ -40,12 +42,25 @@ jobs:
     - name: DVC push
       run: dvc push
 
-    - name: Fly.io deploy
-      env:
-        FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    - name: Configure Git
       run: |
-        curl -L https://fly.io/install.sh | sh
-        export FLYCTL_INSTALL="/home/runner/.fly"
-        export PATH="$FLYCTL_INSTALL/bin:$PATH"
-        flyctl auth token $FLY_API_TOKEN
-        flyctl deploy
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Push changes to the repository
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git add dvc.lock dvclive
+        git commit -m "Update DVC lock file and dvclive metrics"
+        git push origin main
+
+    # - name: Fly.io deploy
+    #   env:
+    #     FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    #   run: |
+    #     curl -L https://fly.io/install.sh | sh
+    #     export FLYCTL_INSTALL="/home/runner/.fly"
+    #     export PATH="$FLYCTL_INSTALL/bin:$PATH"
+    #     flyctl auth token $FLY_API_TOKEN
+    #     flyctl deploy
