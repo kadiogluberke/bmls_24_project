@@ -37,10 +37,10 @@ jobs:
       run: echo "${{ secrets.ENV_FILE }}" > .env
 
     - name: Run DVC experiments
-      run: dvc exp run --force
+      run: dvc exp run
 
     - name: DVC push
-      run: dvc push
+      run: echo "dvc push"
 
     - name: Configure Git
       run: |
@@ -52,6 +52,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.CONFIGURED_GITHUB_TOKEN }}
       run: |
+        echo {{ secrets.CONFIGURED_GITHUB_TOKEN }}
+        echo {{ secrets.CONFIGURED_GITHUB_TOKEN }} | gh auth login --with-token
         BRANCH_NAME=run-exp-$(date +'%Y%m%d-%H%M')
         git checkout -b $BRANCH_NAME
         git add dvc.lock dvclive
