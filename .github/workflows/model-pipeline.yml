@@ -49,8 +49,9 @@ jobs:
 
     - name: Push changes to new branch
       id: push-branch
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        echo {{ secrets.CONFIGURED_GITHUB_TOKEN }} | gh auth login --with-token
         BRANCH_NAME=run-exp-$(date +'%Y%m%d-%H%M')
         git checkout -b $BRANCH_NAME
         git add dvc.lock dvclive
@@ -60,9 +61,9 @@ jobs:
   
     - name: Create Pull Request
       env:
-        GITHUB_TOKEN: ${{ secrets.CONFIGURED_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         BRANCH_NAME=${{ needs.model-pipeline.outputs.branch_name }}
-        curl -u "github-actions[bot]:${{ secrets.CONFIGURED_GITHUB_TOKEN }}" \
+        curl -u "github-actions[bot]:${{ secrets.GITHUB_TOKEN }}" \
         -d '{"title":"Run DVC Experiments for model pipeline","head":"'"$BRANCH_NAME"'","base":"prod"}' \
         https://api.github.com/repos/${{ github.repository }}/pulls
