@@ -69,9 +69,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         PR_TITLE="Update DVC lock file and dvclive metrics"
-        PR_BODY="This pull request updates the DVC lock file and dvclive metrics."
+        METRICS=$(cat dvclive/metrics.json | jq -R -s)
+        PR_BODY="This pull request updates the DVC lock file and dvclive metrics.\n\n## Metrics\n\`\`\`json\n$METRICS\n\`\`\`"
         BRANCH_NAME=${{ steps.push-branch.outputs.branch_name }}
-        BASE_BRANCH=main
+        BASE_BRANCH=prod
         API_URL="https://api.github.com/repos/${{ github.repository }}/pulls"
         
         curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
