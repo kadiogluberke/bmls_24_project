@@ -14,3 +14,4 @@ dvc_s3
 pytest
 prefect
 dvclive
+evidently
