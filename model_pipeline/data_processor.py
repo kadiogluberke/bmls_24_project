@@ -18,7 +18,7 @@ class DataProcessor:
         return df, df_zone
 
     def extract_features(
-        self, df: pd.DataFrame, remove_invalid: bool = True
+        self, df: pd.DataFrame, remove_invalid: bool = True, keep_trip_id: bool = False
     ) -> pd.DataFrame:
         logging.info("Start extracting features")
 
@@ -66,9 +66,10 @@ class DataProcessor:
                 "improvement_surcharge",
                 "congestion_surcharge",
                 "Airport_fee",
-                "trip_id",
             ]
         )
+        if not keep_trip_id:
+            df = df.drop(columns=["trip_id"])
 
         return df
 
