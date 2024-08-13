@@ -25,7 +25,10 @@ def drift_quality_report() -> None:
     df_val = pd.read_csv('./data/val.csv')
     df_ref = pd.concat([df_train, df_val])
 
-    X_cols = [col for col in df_current.columns if col not in ['prediction', 'trip_id']]
+    df_ref.rename(columns={"trip_time": "target"}, inplace=True)
+    df_current.rename(columns={"prediction": "target"}, inplace=True)
+
+    report_cols = [col for col in df_current.columns if col not in ['trip_id']]
 
     evidently_token = os.getenv("EVIDENTLY_TOKEN")
     evidently_project_id = os.getenv("EVIDENTLY_PROJECT_ID")
@@ -43,7 +46,7 @@ def drift_quality_report() -> None:
         ],
     )
 
-    data_report.run(reference_data=df_ref[X_cols], current_data=df_current[X_cols])
+    data_report.run(reference_data=df_ref[report_cols], current_data=df_current[report_cols])
 
     ws.add_report(project.id, data_report)
 
