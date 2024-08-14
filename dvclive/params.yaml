@@ -1,12 +1,12 @@
 best_params:
-  max_depth: 7
-  learning_rate: 0.2980765519035124
-  n_estimators: 238
-  min_child_weight: 3
-  gamma: 0.8924278536906676
-  subsample: 0.8146270329389664
-  colsample_bytree: 0.8289228746053637
-  lambda: 8.778567550933792e-07
-  alpha: 8.649048916870395e-06
-len_train_data: 648364
-len_test_data: 138936
+  max_depth: 10
+  learning_rate: 0.2980960502349103
+  n_estimators: 95
+  min_child_weight: 4
+  gamma: 0.9667355459175464
+  subsample: 0.87567983131543
+  colsample_bytree: 0.6542999155034603
+  lambda: 0.0010608111149595673
+  alpha: 6.673894565242876e-06
+len_train_data: 609702
+len_test_data: 130651
