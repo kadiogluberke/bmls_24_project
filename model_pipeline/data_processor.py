@@ -44,6 +44,7 @@ class DataProcessor:
                 & (df["fare_amount"] > 0)
                 & (df["total_amount"] > 0)
                 & (df["trip_time"] > 0)
+                & (df["trip_time"] < 300)
             ]
 
         df["is_from_airport"] = df["Airport_fee"].apply(lambda x: 1 if x > 0 else 0)
