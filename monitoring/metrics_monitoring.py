@@ -37,7 +37,7 @@ def get_data_from_db() -> pd.DataFrame:
 @prefect.task
 def get_data_from_logs() -> pd.DataFrame:
     log_reader = monitoring.log_reader.LogReader()
-    df = log_reader.download_logs(last_n_minutes=2800)
+    df = log_reader.download_logs(last_n_minutes=120)
     df["trip_id"] = df["trip_id"].astype(str)
     return df
 
