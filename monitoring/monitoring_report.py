@@ -16,7 +16,7 @@ from evidently.metric_preset import TargetDriftPreset
 def get_data_from_logs() -> pd.DataFrame:
     log_reader = LogReader()
     df = log_reader.download_logs(last_n_minutes=30)
-    df["trip_id"] = df["trip_id"].astype(str)
+    # df["trip_id"] = df["trip_id"].astype(str)
     return df
 
 
