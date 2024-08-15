@@ -18,8 +18,8 @@ stages:
     outs:
     - path: data/data.csv
       hash: md5
-      md5: f2cd8643dfe05f6dac0d33d80d4440ba
-      size: 144781756
+      md5: 95d7c4dbdc747ac1012be147b1a107af
+      size: 141994868
     - path: data/zones.csv
       hash: md5
       md5: 3b5ed059f4ff23f0927b3373d4a67d9f
@@ -29,8 +29,8 @@ stages:
     deps:
     - path: data/data.csv
       hash: md5
-      md5: f2cd8643dfe05f6dac0d33d80d4440ba
-      size: 144781756
+      md5: 95d7c4dbdc747ac1012be147b1a107af
+      size: 141994868
     - path: data/zones.csv
       hash: md5
       md5: 3b5ed059f4ff23f0927b3373d4a67d9f
@@ -50,27 +50,27 @@ stages:
     outs:
     - path: data/test.csv
       hash: md5
-      md5: 627a1a8c42bc200f246b30d909b923eb
-      size: 14844271
+      md5: 09cd48149fc0d13d1cf0ee451f3e2873
+      size: 14560018
     - path: data/train.csv
       hash: md5
-      md5: 9603f44867ebf37ed9cd11e96e67b3c2
-      size: 68781188
+      md5: 9ebd7e85a621e37eaec023a73200c61b
+      size: 67537239
     - path: data/val.csv
       hash: md5
-      md5: 60fa6cda8d834d50183dde5db321e1d2
-      size: 14847348
+      md5: 79783cf673cef52af9b98a05f25c1ab8
+      size: 14558403
   train_model:
     cmd: python -m scripts.train
     deps:
     - path: data/train.csv
       hash: md5
-      md5: 9603f44867ebf37ed9cd11e96e67b3c2
-      size: 68781188
+      md5: 9ebd7e85a621e37eaec023a73200c61b
+      size: 67537239
     - path: data/val.csv
       hash: md5
-      md5: 60fa6cda8d834d50183dde5db321e1d2
-      size: 14847348
+      md5: 79783cf673cef52af9b98a05f25c1ab8
+      size: 14558403
     - path: model_pipeline/model_trainer.py
       hash: md5
       md5: 15edb67f7de03c93e504687aae04f7db
@@ -86,23 +86,23 @@ stages:
     outs:
     - path: models/xgb.json
       hash: md5
-      md5: 8c1198ffd0f4c550a9b8f1e1c99424a6
-      size: 966603
+      md5: 7779dbff539781cae29a037f560b10c4
+      size: 961979
   evaluate_model:
     cmd: python -m scripts.evaluate
     deps:
     - path: data/test.csv
       hash: md5
-      md5: 627a1a8c42bc200f246b30d909b923eb
-      size: 14844271
+      md5: 09cd48149fc0d13d1cf0ee451f3e2873
+      size: 14560018
     - path: model_pipeline/model_evaluator.py
       hash: md5
       md5: fd5b0f8d26707b90a29ec09350230ca3
       size: 2846
     - path: models/xgb.json
       hash: md5
-      md5: 8c1198ffd0f4c550a9b8f1e1c99424a6
-      size: 966603
+      md5: 7779dbff539781cae29a037f560b10c4
+      size: 961979
     - path: requirements.txt
       hash: md5
       md5: d138bb73ba41f5ca73e95145d90b9e32
