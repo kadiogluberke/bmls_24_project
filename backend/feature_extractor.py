@@ -104,7 +104,19 @@ class FeatureExtractor:
 
     def extract_features(self, request: PredictionRequest) -> pd.DataFrame:
 
-        request_datetime = pd.to_datetime(request.request_datetime)
+        expected_format = "%Y-%m-%dT%H/%M/%S%z"
+        try:
+            request_datetime = pd.to_datetime(
+                request.request_datetime, format=expected_format
+            )
+        except ValueError:
+            try:
+                request_datetime = pd.to_datetime(request.request_datetime)
+            except ValueError:
+                self.logger.error(
+                    f"Request datetime {request.request_datetime} does not match the expected format {expected_format} nor the default format"
+                )
+                raise
 
         features = {
             "trip_distance": request.trip_distance,
