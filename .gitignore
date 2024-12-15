@@ -166,5 +166,6 @@ cython_debug/
 /models/
 **/.DS_Store
 models/model.json
+venv_activation.txt
 
 
