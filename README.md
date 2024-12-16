@@ -1,6 +1,6 @@
 # nytaxi
 
-This repository originates from a project developed during the *Building ML Solutions* course at Harbour.Space University in July 2024. The original project repository can be found [here](https://github.com/building-ml-hs). This repository was created for personal exploration and experimentation.
+This repository originates from a project developed during the *Building ML Solutions* course at Harbour.Space University in August 2024. The original project repository can be found [here](https://github.com/building-ml-hs). This repository was created for personal exploration and experimentation.
 
 Please also check my brilliant friend [Humberto Yusta Gómez](https://github.com/humbertoyusta), who is also a contributor to the project.
 
