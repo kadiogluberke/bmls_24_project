@@ -15,7 +15,7 @@ The purpose of this project is to provide a comprehensive machine learning solut
 - **Deployment:** The project employs Fly.io for deployment.
 - **Monitoring:** Grafana and Evidently are integrated for monitoring model performance and metrics.
 - **Pipeline Orchestration:** Prefect is set up for potential scheduled pipeline execution.
-- **CI/CD:** GitHub Actions is configured to automate pipeline execution.
+- **CI/CD:** Github Actions are used for automated deployment
 
 ## Instructors
 
