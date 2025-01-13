@@ -1,4 +1,4 @@
-# nytaxi
+# NY Taxi Travel Time Prediction
 
 This repository originates from a project developed during the *Building ML Solutions* course at Harbour.Space University in August 2024. The original project repository can be found [here](https://github.com/building-ml-hs). This repository was created for personal exploration and experimentation.
 
